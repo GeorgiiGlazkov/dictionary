@@ -17,3 +17,14 @@ void addWord(TrieNode* root, char* word) {
     currTrieNode->isLetter = word[len - 1];
     currTrieNode->isTerminal = 0;
 }
+
+bool findWord(TrieNode* root, char* word) {
+    int len = sizeof(word);
+    TrieNode* currTrieNode = root;
+    for (int i = 0; i < len; i++) {
+        char symbol = word[i];
+        currTrieNode = currTrieNode->children[atio(symbol) - 97];
+        if (currTrieNode->isLetter == 0) return 0;
+    }
+    return currTrieNode->isTerminal;
+}

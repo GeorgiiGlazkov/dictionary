@@ -10,3 +10,5 @@ typedef struct TrieNode {
 
 void addWord(TrieNode* root, char* word);
 
+bool findWord(TrieNode* root, char* word);
+
