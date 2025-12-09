@@ -28,3 +28,34 @@ bool findWord(TrieNode* root, char* word) {
     }
     return currTrieNode->isTerminal;
 }
+
+void deleteWord(TrieNode* root, char* word) {
+    if (findWord(root, word) == 0) {
+        printf("There is no word %s", word);
+        return;
+    }
+    int len = sizeof(word);
+    TrieNode* currTrieNode = root;
+    int lastTerminal = 1;
+    for (int i = 0; i < len- 1; i++) {
+        currTrieNode = currTrieNode->children[atio(word[i]) - 97];
+        if (currTrieNode->isTerminal == 1) lastTerminal = i;
+    }
+    
+    for (int i = 0; i < MAX_CHILDREN; i++) {
+        if (currTrieNode->children[i] == 1) return; 
+    }
+
+    currTrieNode = root;
+
+    for (int i = 0; i < lastTerminal; i++) {
+        currTrieNode = currTrieNode->children[atio(word[i]) - 97];
+    }
+
+    TrieNode* TrieNodeToDelete = currTrieNode;
+
+    while (currTrieNode->isTerminal != 1) {
+        currTrieNode = currTrieNode->children[word[++lastTerminal]];
+        free(TrieNodeToDelete);
+    }
+}
