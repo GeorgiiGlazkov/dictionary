@@ -1,4 +1,8 @@
+#ifndef TRIE_H
+#define TRIE_H
+
 #include <stdbool.h>
+#include <stdio.h>
 
 #define MAX_CHILDREN 27
 
@@ -12,3 +16,6 @@ void addWord(TrieNode* root, char* word);
 
 bool findWord(TrieNode* root, char* word);
 
+void deleteWord(TrieNode* root, char* word);
+
+#endif // TRIE_H
