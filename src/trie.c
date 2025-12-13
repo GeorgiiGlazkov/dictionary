@@ -4,10 +4,17 @@
 #include <string.h>
 #include <stdbool.h>
 
-/* TODO:
+
 void freeTrie(TrieNode *root) {
+    TrieNode* currTrieNode = root;
+    
+    for (int i = 0; i < MAX_CHILDREN; i++) {
+        if (currTrieNode->children[i] != NULL) 
+        freeTrieAndExit(currTrieNode->children[i]);
+        freeTrie(currTrieNode);
+    }
 }
-*/
+
 
 TrieNode* addWord(TrieNode* root, char* word) {
     if (root == NULL) {
