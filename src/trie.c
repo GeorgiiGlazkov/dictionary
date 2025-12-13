@@ -1,29 +1,43 @@
 #include "../include/trie.h"
+#include "../include/utility.h"
 
-void addWord(TrieNode* root, char* word) {
-    int len = sizeof(word);
-    TrieNode* currTrieNode = root;
-    //Node* newNode = malloc(sizeof(Node));
-    for (int i = 0; i < len - 1; i++) {
-        char symbol = word[i];
-        currTrieNode->children[atio(symbol) - 97] = malloc(sizeof(TrieNode));
-        currTrieNode = currTrieNode->children[atio(symbol) - 97];
-        currTrieNode->isLetter = word[i];
-        currTrieNode->isTerminal = 0;
+#include <string.h>
+#include <stdbool.h>
+
+/* TODO:
+void freeTrie(TrieNode *root) {
+}
+*/
+
+TrieNode* addWord(TrieNode* root, char* word) {
+    if (root == NULL) {
+        root = createTrieNode(root);
     }
-    
-    char symbol = word[len - 1];
-    currTrieNode = currTrieNode->children[atio(symbol) - 97];
-    currTrieNode->isLetter = word[len - 1];
-    currTrieNode->isTerminal = 0;
+
+    int len = strlen(word);
+
+    TrieNode* nextTrieNode = NULL, *currTrieNode = root;
+
+    for (int i = 0; i < len; i++) {
+        char letter = word[i];
+
+        nextTrieNode = currTrieNode->children[getChildIndexFromLetter(letter)];
+
+        if (nextTrieNode == NULL) {
+            nextTrieNode = createTrieNode(root);
+        }
+
+        currTrieNode = nextTrieNode;
+        if (i == len - 1) currTrieNode->isTerminal = true;
+    }   
 }
 
 bool findWord(TrieNode* root, char* word) {
     int len = sizeof(word);
     TrieNode* currTrieNode = root;
     for (int i = 0; i < len; i++) {
-        char symbol = word[i];
-        currTrieNode = currTrieNode->children[atio(symbol) - 97];
+        char letter = word[i];
+        currTrieNode = currTrieNode->children[getChildIndexFromLetter(letter)];
         if (currTrieNode->isLetter == 0) return 0;
     }
     return currTrieNode->isTerminal;
