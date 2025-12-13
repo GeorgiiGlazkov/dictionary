@@ -10,9 +10,10 @@ void freeTrie(TrieNode *root) {
     
     for (int i = 0; i < MAX_CHILDREN; i++) {
         if (currTrieNode->children[i] != NULL) 
-        freeTrieAndExit(currTrieNode->children[i]);
-        freeTrie(currTrieNode);
+        freeTrie(currTrieNode->children[i]);    
     }
+    
+    free(currTrieNode);
 }
 
 

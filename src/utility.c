@@ -12,14 +12,7 @@ size_t getChildIndexFromLetter(char letter) {
 
 
 void freeTrieAndExit(TrieNode *root) {
-    TrieNode* currTrieNode = root;
-    
-    for (int i = 0; i < MAX_CHILDREN; i++) {
-        if (currTrieNode->children[i] != NULL) 
-        freeTrieAndExit(currTrieNode->children[i]);
-        freeTrie(currTrieNode);
-    }
-    
+    freeTrie(root);
     exit(1);
 }
 
