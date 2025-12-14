@@ -17,23 +17,23 @@ void freeTrieAndExit(TrieNode *root) {
 }
 
 
-TrieNode* createTrieNode(void) {
+TrieNode* createTrieNode(TrieNode* root) {
     TrieNode* newTrieNode = malloc(sizeof(TrieNode));
     
     if (newTrieNode == NULL) {
-        /* TODO:
-        Implement another utility function that takes pointer to root,
-        and exits from the program after freeing all the memory.
-        
-        Which in turn implies, that a freeTrie function has to be implemented as well.
-        */
-
-        // freeTrieAndExit(newTrieNode *root);
-        return NULL;
+        freeTrieAndExit(root);
     }
 
     newTrieNode->children = {NULL};
     newTrieNode->isTerminal = false;
 
     return newTrieNode;
+}
+
+bool isOnlyChild(TrieNode* node, char letter) {
+    for (size_t i = 0; i < MAX_CHILDREN; i++) {
+        if (node->children[i] != NULL && i != getChildIndexFromLetter(letter) return false;
+    }
+
+    return true;
 }
