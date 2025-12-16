@@ -44,10 +44,10 @@ bool findWord(TrieNode* root, char* word) {
     size_t len = strlen(word);
     TrieNode* currTrieNode = root;
 
-    for (size_t i = 0; i < len - 1; i++) {
+    for (size_t i = 0; i < len; i++) {
         if (currTrieNode == NULL) return false;
 
-        currTrieNode = currTrieNode->children[getChildIndexFromLetter(word[i]);
+        currTrieNode = currTrieNode->children[getChildIndexFromLetter(word[i])];
     }
 
     return currTrieNode->isTerminal;
@@ -88,12 +88,7 @@ void deleteWord(TrieNode* root, char* word) {
 	if (children > 0) {
 	currTrieNode->isTerminal = false;
 	}else {
-	freeTrie(lastUnsafeToDeleteNode->children[getChildIndexFromLetter(word[i])];
+	freeTrie(lastUnsafeToDeleteNode->children[getChildIndexFromLetter(word[lastUnsafeLetterIndex])]);
 	}
-
-
-
-
-
 }
 
