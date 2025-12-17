@@ -24,7 +24,10 @@ TrieNode* createTrieNode(TrieNode* root) {
         freeTrieAndExit(root);
     }
 
-    newTrieNode->children = {NULL};
+    for (int i = 0; i < MAX_CHILDREN;  i++) {
+        newTrieNode->children[i] = NULL;
+    }
+    
     newTrieNode->isTerminal = false;
 
     return newTrieNode;
@@ -32,7 +35,15 @@ TrieNode* createTrieNode(TrieNode* root) {
 
 bool isOnlyChild(TrieNode* node, char letter) {
     for (size_t i = 0; i < MAX_CHILDREN; i++) {
-        if (node->children[i] != NULL && i != getChildIndexFromLetter(letter) return false;
+        if (node->children[i] != NULL && i != getChildIndexFromLetter(letter)) return false;
+    }
+
+    return true;
+}
+
+bool isChildless(TrieNode* node) {
+    for (int i = 0; i < MAX_CHILDREN; i++) {
+        if (node->children[i] != NULL) return false;
     }
 
     return true;

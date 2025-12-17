@@ -13,4 +13,6 @@ TrieNode* createTrieNode(TrieNode* root);
 
 bool isOnlyChild(TrieNode* node, char letter);
 
+bool isChildless(TrieNode* node);
+
 #endif // UTILITY_H

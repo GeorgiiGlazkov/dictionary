@@ -58,32 +58,23 @@ void deleteWord(TrieNode* root, char* word) {
     TrieNode* currTrieNode = root;
     TrieNode* lastUnsafeToDeleteNode = NULL;
 	size_t lastUnsafeLetterIndex = 0;
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < len - 1; i++)
     {
-        if (currTrieNode->children[getChildIndexFromLetter(word[i])] == NULL) {
+        TrieNode* nextTrieNode = currTrieNode->children[getChildIndexFromLetter(word[i])];
+
+        if (nextTrieNode == NULL) {
             printf("Deletion cancelled: no such word (%s)\n", word);
             return;
         }
 
-		size_t children = 0;
-
-		for (int i = 0; i < MAX_CHILDREN; i++) {
-			if (currTrieNode->children[i] != NULL) children++;
-		}
-
-		if (children > 1 || (currTrieNode->isTerminal == 1 && i < len - 1)) {
+		if (!isOnlyChild(root, word[i]) || (currTrieNode->isTerminal && i < len - 1)) {
 			lastUnsafeToDeleteNode = currTrieNode;
 			lastUnsafeLetterIndex = i;
 		}
 
-		currTrieNode = currTrieNode->children[getChildIndexFromLetter(word[i])];
+		currTrieNode = nextTrieNode;
     }
 
-	size_t children = 0;
-
-	for (int i = 0; i < MAX_CHILDREN; i++) {
-		if (currTrieNode->children[i] != NULL) children++;
-	}
 
 	if (children > 0) {
 	currTrieNode->isTerminal = false;
