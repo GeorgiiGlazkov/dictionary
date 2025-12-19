@@ -46,3 +46,25 @@ void testAddWord() {
 
     freeTrie(root);
 }
+
+void testDeleteWord() {
+    TrieNode* root = init();
+    //deleteWord(root, "cockroach");
+    //printf("\n");
+    deleteWord(root, "cat");
+    assert(findWord(root, "cat") == false);
+    assert(findWord(root, "catterpillar") == true);
+
+    deleteWord(root, "catterpillar");
+    assert(findWord(root, "catterpillar") == false);
+
+    free(root);
+
+    TrieNode* root = init();
+
+    deleteWord(root, "catterpillar");
+    assert(findWord(root, "catterpillar") == false);
+    assert(findWord(root, "cat") == true);
+
+    freeTrie(root);
+}
