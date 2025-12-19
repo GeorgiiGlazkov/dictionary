@@ -1,5 +1,5 @@
 #include "../include/trie.h"
-#include "../include/utility.h"
+#include "../common/include/utility.h"
 
 #include <string.h>
 #include <stdbool.h>
@@ -76,10 +76,10 @@ void deleteWord(TrieNode* root, char* word) {
     }
 
 
-	if (children > 0) {
-	currTrieNode->isTerminal = false;
-	}else {
-	freeTrie(lastUnsafeToDeleteNode->children[getChildIndexFromLetter(word[lastUnsafeLetterIndex])]);
+	if (!isChildless(currTrieNode)) {
+	    currTrieNode->isTerminal = false;
+	} else {
+	    freeTrie(lastUnsafeToDeleteNode->children[getChildIndexFromLetter(word[lastUnsafeLetterIndex])]);
 	}
 }
 
