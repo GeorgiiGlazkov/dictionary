@@ -21,3 +21,15 @@ TrieNode* init(void) {
     return root;
 }
 
+void testFindWord(void) {
+    TrieNode* root = NULL;
+    assert(findWord(root, "cat") == false);
+    assert(findWord(root, "") == false);
+
+    TrieNode* root = init();
+    assert(findWord(root, "cat") == true);
+    assert(findWord(root, "cat") == true);
+    assert(findWord(root, "cockroach") == false);
+    
+    freeTrie(root);
+}
