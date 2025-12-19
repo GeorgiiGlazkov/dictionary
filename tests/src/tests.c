@@ -33,3 +33,16 @@ void testFindWord(void) {
     
     freeTrie(root);
 }
+
+void testAddWord() {
+    TrieNode* root = createTrieNode(NULL);
+
+    addWord(root, "catterpillar");
+    assert(findWord(root, "catterpillar") == true);
+    assert(findWord(root, "cat" == false));
+
+    addWord(root, "cat");
+    assert(findWord(root, "cat") == true);
+
+    freeTrie(root);
+}
