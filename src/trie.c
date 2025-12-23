@@ -3,7 +3,9 @@
 
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
+#define ASCII_a 97
 
 void freeTrie(TrieNode *root) {
     TrieNode* currTrieNode = root;
@@ -17,9 +19,9 @@ void freeTrie(TrieNode *root) {
 }
 
 
-TrieNode* addWord(TrieNode* root, char* word) {
+void addWord(TrieNode* root, char* word) {
     if (root == NULL) {
-        root = createTrieNode(root);
+        freeTrieAndExit(root);
     }
 
     size_t len = strlen(word);
@@ -34,22 +36,29 @@ TrieNode* addWord(TrieNode* root, char* word) {
         if (nextTrieNode == NULL) {
             nextTrieNode = createTrieNode(root);
         }
-
         currTrieNode = nextTrieNode;
+
         if (i == len - 1) currTrieNode->isTerminal = true;
-    }   
+    }
+    
+      
 }
 
 bool findWord(TrieNode* root, char* word) {
+    if (root == NULL) return false;
+
     size_t len = strlen(word);
     TrieNode* currTrieNode = root;
 
     for (size_t i = 0; i < len; i++) {
-        if (currTrieNode == NULL) return false;
-
+        printf("test\n");
+        if (currTrieNode == NULL) {
+            printf("not found\n");
+            return false;
+        }
         currTrieNode = currTrieNode->children[getChildIndexFromLetter(word[i])];
     }
-
+    
     return currTrieNode->isTerminal;
 }
 
@@ -83,3 +92,23 @@ void deleteWord(TrieNode* root, char* word) {
 	}
 }
 
+void drawTrie(TrieNode* root, char word[]) {
+    TrieNode* currTrieNode = root;
+    
+    while(!isChildless(currTrieNode)) {
+        for (int i = 0; i < MAX_CHILDREN; i++) {
+            TrieNode* child = currTrieNode->children[i];
+            
+            if (child != NULL) {
+                if (child->isTerminal == 1) {
+                    printf("%s\n", word);
+                } else {
+                    size_t len = strlen(word);
+                    word[len] = i + ASCII_a;
+                    word[len + 1] = '\0';
+                    drawTrie(currTrieNode, word);
+                } 
+            }
+        }
+    }
+} 

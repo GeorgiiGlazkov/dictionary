@@ -1,7 +1,10 @@
 #include "../../include/trie.h"
 #include "../../common/include/utility.h"
+#include "../include/tests.h"
 
 #include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 
 TrieNode* init(void) {
     char* cat = "cat";
@@ -26,7 +29,7 @@ void testFindWord(void) {
     assert(findWord(root, "cat") == false);
     assert(findWord(root, "") == false);
 
-    TrieNode* root = init();
+    root = init();
     assert(findWord(root, "cat") == true);
     assert(findWord(root, "cat") == true);
     assert(findWord(root, "cockroach") == false);
@@ -36,10 +39,10 @@ void testFindWord(void) {
 
 void testAddWord() {
     TrieNode* root = createTrieNode(NULL);
-
     addWord(root, "catterpillar");
+    
     assert(findWord(root, "catterpillar") == true);
-    assert(findWord(root, "cat" == false));
+    assert(findWord(root, "cat") == false);
 
     addWord(root, "cat");
     assert(findWord(root, "cat") == true);
@@ -60,7 +63,7 @@ void testDeleteWord() {
 
     free(root);
 
-    TrieNode* root = init();
+    root = init();
 
     deleteWord(root, "catterpillar");
     assert(findWord(root, "catterpillar") == false);
@@ -68,3 +71,4 @@ void testDeleteWord() {
 
     freeTrie(root);
 }
+

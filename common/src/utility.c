@@ -1,13 +1,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "../include/trie.h"
+#include "../../include/trie.h"
 #include "../include/utility.h"
 
 #define ASCII_a 97
 
 size_t getChildIndexFromLetter(char letter) {
-    return atio(letter) - ASCII_a;
+    return letter - ASCII_a;
 }
 
 
