@@ -8,14 +8,20 @@
 #define ASCII_a 97
 
 void freeTrie(TrieNode *root) {
-    TrieNode* currTrieNode = root;
-    
+    // printf("Begin\n");
+    if (root == NULL) return;
+
+    // printf("Before loop\n");
+
     for (int i = 0; i < MAX_CHILDREN; i++) {
-        TrieNode* currChild = currTrieNode->children[i];
-        if (currChild != NULL) freeTrie(currChild);
+        // printf("%d\n", i);
+        freeTrie(root->children[i]);
+       // printf("End of the loop\n");
     }
     
-    free(currTrieNode);
+        free(root);
+
+    // printf("Finished\n");
 }
 
 
@@ -23,25 +29,21 @@ void addWord(TrieNode* root, char* word) {
     if (root == NULL) {
         freeTrieAndExit(root);
     }
-
+    
     size_t len = strlen(word);
 
     TrieNode* nextTrieNode = NULL, *currTrieNode = root;
 
     for (int i = 0; i < len; i++) {
-        char letter = word[i];
+        size_t index = getChildIndexFromLetter(word[i]);
 
-        nextTrieNode = currTrieNode->children[getChildIndexFromLetter(letter)];
-
-        if (nextTrieNode == NULL) {
-            nextTrieNode = createTrieNode(root);
+        if (currTrieNode->children[index] == NULL) {
+            currTrieNode->children[index] = createTrieNode(root);
         }
-        currTrieNode = nextTrieNode;
 
+        currTrieNode = currTrieNode->children[index];
         if (i == len - 1) currTrieNode->isTerminal = true;
     }
-    
-      
 }
 
 bool findWord(TrieNode* root, char* word) {
@@ -51,11 +53,10 @@ bool findWord(TrieNode* root, char* word) {
     TrieNode* currTrieNode = root;
 
     for (size_t i = 0; i < len; i++) {
-        printf("test\n");
         if (currTrieNode == NULL) {
-            printf("not found\n");
             return false;
         }
+
         currTrieNode = currTrieNode->children[getChildIndexFromLetter(word[i])];
     }
     
@@ -63,33 +64,47 @@ bool findWord(TrieNode* root, char* word) {
 }
 
 void deleteWord(TrieNode* root, char* word) {
-    size_t len = strlen(word);
-    TrieNode* currTrieNode = root;
-    TrieNode* lastUnsafeToDeleteNode = NULL;
-	size_t lastUnsafeLetterIndex = 0;
-    for (int i = 0; i < len - 1; i++)
-    {
-        TrieNode* nextTrieNode = currTrieNode->children[getChildIndexFromLetter(word[i])];
+    size_t len = strlen(word), lastUnsafeLetterIndex = 0;
 
-        if (nextTrieNode == NULL) {
-            printf("Deletion cancelled: no such word (%s)\n", word);
+    TrieNode* currTrieNode = root, *lastUnsafeToDeleteNode = root;
+    int indexOfLetter = 0;
+    while (indexOfLetter < len - 1) {
+        if (currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])] == NULL) {
             return;
         }
+        
+       // printf("%d, %c\n", indexOfLetter, word[indexOfLetter]);
 
-		if (!isOnlyChild(root, word[i]) || (currTrieNode->isTerminal && i < len - 1)) {
+        
+
+		if (!isOnlyChild(currTrieNode, word[indexOfLetter]) || currTrieNode->isTerminal) {
 			lastUnsafeToDeleteNode = currTrieNode;
-			lastUnsafeLetterIndex = i;
+			lastUnsafeLetterIndex = indexOfLetter;
 		}
 
-		currTrieNode = nextTrieNode;
+		currTrieNode = currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])];
+        indexOfLetter++;
     }
-
-
-	if (!isChildless(currTrieNode)) {
-	    currTrieNode->isTerminal = false;
+    
+    if (currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])] == NULL) {
+            return;
+        }
+    
+    TrieNode* NextTrieNode = currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])];
+    
+    // printf("%d, %c\n", indexOfLetter, word[indexOfLetter]);
+	
+    if (!isChildless(NextTrieNode)) {
+	    // printf("Последний - терминальный\n");
+        NextTrieNode->isTerminal = false;
+        // printf("OK\n");
 	} else {
-	    freeTrie(lastUnsafeToDeleteNode->children[getChildIndexFromLetter(word[lastUnsafeLetterIndex])]);
+	    // printf("Удаляем дерево\n");
+        freeTrie(lastUnsafeToDeleteNode->children[getChildIndexFromLetter(word[lastUnsafeLetterIndex])]);
+        // printf("OK\n");
 	}
+
+    printf("Delete is fixed");
 }
 
 void drawTrie(TrieNode* root, char word[]) {
