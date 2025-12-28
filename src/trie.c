@@ -8,20 +8,13 @@
 #define ASCII_a 97
 
 void freeTrie(TrieNode *root) {
-    // printf("Begin\n");
     if (root == NULL) return;
 
-    // printf("Before loop\n");
-
     for (int i = 0; i < MAX_CHILDREN; i++) {
-        // printf("%d\n", i);
-        freeTrie(root->children[i]);
-       // printf("End of the loop\n");
+        if (root->children[i] != NULL) freeTrie(root->children[i]);
     }
     
-        free(root);
-
-    // printf("Finished\n");
+    free(root);
 }
 
 
@@ -31,6 +24,11 @@ void addWord(TrieNode* root, char* word) {
     }
     
     size_t len = strlen(word);
+
+    if (len >= MAX_WORD_LEN) {
+        printf("Only words under %d characters are supported. Addition cancelled\n", MAX_WORD_LEN);
+        return;
+    }
 
     TrieNode* nextTrieNode = NULL, *currTrieNode = root;
 
@@ -68,62 +66,52 @@ void deleteWord(TrieNode* root, char* word) {
 
     TrieNode* currTrieNode = root, *lastUnsafeToDeleteNode = root;
     int indexOfLetter = 0;
-    while (indexOfLetter < len - 1) {
+
+    for (; indexOfLetter < len - 1; indexOfLetter++) {
         if (currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])] == NULL) {
             return;
         }
         
-       // printf("%d, %c\n", indexOfLetter, word[indexOfLetter]);
-
-        
-
 		if (!isOnlyChild(currTrieNode, word[indexOfLetter]) || currTrieNode->isTerminal) {
 			lastUnsafeToDeleteNode = currTrieNode;
 			lastUnsafeLetterIndex = indexOfLetter;
 		}
 
 		currTrieNode = currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])];
-        indexOfLetter++;
     }
     
-    if (currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])] == NULL) {
-            return;
-        }
-    
-    TrieNode* NextTrieNode = currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])];
-    
-    // printf("%d, %c\n", indexOfLetter, word[indexOfLetter]);
-	
-    if (!isChildless(NextTrieNode)) {
-	    // printf("Последний - терминальный\n");
-        NextTrieNode->isTerminal = false;
-        // printf("OK\n");
-	} else {
-	    // printf("Удаляем дерево\n");
-        freeTrie(lastUnsafeToDeleteNode->children[getChildIndexFromLetter(word[lastUnsafeLetterIndex])]);
-        // printf("OK\n");
-	}
+    TrieNode* nextTrieNode = currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])];
 
-    printf("Delete is fixed");
+    if (nextTrieNode == NULL) {
+        return;
+    }
+    
+    if (isChildless(nextTrieNode)) {
+        size_t childIndex = getChildIndexFromLetter(word[lastUnsafeLetterIndex]);
+
+        freeTrie(lastUnsafeToDeleteNode->children[childIndex]);
+        lastUnsafeToDeleteNode->children[childIndex] = NULL;
+	} else {
+        nextTrieNode->isTerminal = false;
+	}
 }
 
-void drawTrie(TrieNode* root, char word[]) {
-    TrieNode* currTrieNode = root;
-    
-    while(!isChildless(currTrieNode)) {
-        for (int i = 0; i < MAX_CHILDREN; i++) {
-            TrieNode* child = currTrieNode->children[i];
-            
-            if (child != NULL) {
-                if (child->isTerminal == 1) {
-                    printf("%s\n", word);
-                } else {
-                    size_t len = strlen(word);
-                    word[len] = i + ASCII_a;
-                    word[len + 1] = '\0';
-                    drawTrie(currTrieNode, word);
-                } 
-            }
+void drawTrie(TrieNode* root, char word[], size_t wordLen) {
+    for (unsigned char i = 0; i < MAX_CHILDREN; i++) {
+        TrieNode* child = root->children[i];
+
+        if (child == NULL) {
+            continue;
         }
+        
+        word[wordLen] = i + ASCII_a;
+        word[wordLen + 1] = '\0';
+        
+        if (child->isTerminal) {
+            printf("%s\n", word);
+            if (isChildless(child)) continue;
+        }
+
+        drawTrie(child, word, wordLen + 1);
     }
-} 
+}

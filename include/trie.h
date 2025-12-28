@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #define MAX_CHILDREN 27
+#define MAX_WORD_LEN 45
 
 typedef struct TrieNode {
     struct TrieNode *children[MAX_CHILDREN];
@@ -19,6 +20,6 @@ bool findWord(TrieNode* root, char* word);
 
 void deleteWord(TrieNode* root, char* word);
 
-void drawTrie(TrieNode* root, char word[]);
+void drawTrie(TrieNode* root, char word[MAX_WORD_LEN], size_t wordLen);
 
 #endif // TRIE_H
