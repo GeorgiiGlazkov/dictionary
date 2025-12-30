@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Werror
-SRC = $(wildcard src/*.c) main.c
+SRC = $(wildcard common/src/*.c) $(wildcard src/*.c) $(wildcard include/src/*.c) $(wildcard test/src/*.c) main.c
 OUT = main
 
 $(OUT): $(SRC) 
