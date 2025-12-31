@@ -30,7 +30,7 @@ void addWord(TrieNode* root, char* word) {
         return;
     }
 
-    TrieNode* nextTrieNode = NULL, *currTrieNode = root;
+    TrieNode* currTrieNode = root;
 
     for (int i = 0; i < len; i++) {
         size_t index = getChildIndexFromLetter(word[i]);
@@ -98,7 +98,7 @@ bool deleteWord(TrieNode* root, char* word) {
     return true;
 }
 
-void drawTrie(TrieNode* root, char word[], size_t wordLen) {
+void drawTrie(TrieNode* root, char word[MAX_WORD_LEN], size_t wordLen) {
     for (unsigned char i = 0; i < MAX_CHILDREN; i++) {
         TrieNode* child = root->children[i];
 
