@@ -50,10 +50,19 @@ bool isChildless(TrieNode* node) {
 }
 
 void processCommand(TrieNode* root, char *command) {
-    char* commandsList = "add  delete  draw  find  exit";
+    char* helpMessage = "Commands are separated from their arguments by a newline character.\n\n"
+    "add <word> -- adds new word to the dictionary\n"
+    "delete <word> -- deletes existing word from the dictionary\n"
+    "draw -- prints all the words from the dictionary\n"
+    "find -- checks if the word exists in the dictionary\n"
+    "help -- see this help message\n"
+    "exit -- exits the program\n";
 
-    if (strcmp(command, "help") == 0) 
-        printf("%s\n", commandsList);
+    char* commandsList = "add delete draw find help exit";
+    
+    if (strcmp(command, "help") == 0) {
+        printf("%s", helpMessage);
+    }
 
     if (strcmp(command, "add") == 0) {
         char word[MAX_WORD_LEN];
