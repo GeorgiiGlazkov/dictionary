@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "../../include/trie.h"
 #include "../include/utility.h"
@@ -10,12 +12,10 @@ size_t getChildIndexFromLetter(char letter) {
     return letter - ASCII_a;
 }
 
-
 void freeTrieAndExit(TrieNode *root) {
     freeTrie(root);
     exit(1);
 }
-
 
 TrieNode* createTrieNode(TrieNode* root) {
     TrieNode* newTrieNode = malloc(sizeof(TrieNode));
@@ -47,4 +47,62 @@ bool isChildless(TrieNode* node) {
     }
 
     return true;
+}
+
+void processCommand(TrieNode* root, char *command) {
+    char* commandsList = "add  delete  draw  find  exit";
+
+    if (strcmp(command, "help") == 0) 
+        printf("%s\n", commandsList);
+
+    if (strcmp(command, "add") == 0) {
+        char word[MAX_WORD_LEN];
+        safeScanf(word, sizeof(word));
+
+        addWord(root, word);
+        printf("Added word: %s\n", word);
+    }
+
+    if (strcmp(command, "delete") == 0) {
+        char word[MAX_WORD_LEN];
+        safeScanf(word, sizeof(word));
+
+        if (deleteWord(root, word)) {
+            printf("Deleted word: %s\n", word);
+        } else {
+            printf("There was no such word: %s\n", word);
+        }
+    }
+
+    if (strcmp(command, "draw") == 0) {
+        char word[MAX_WORD_LEN] = {0};
+        drawTrie(root, word, 0);
+    }
+
+    if (strcmp(command, "find") == 0) {
+        char word[MAX_WORD_LEN];
+        safeScanf(word, sizeof(word));
+
+        if (findWord(root, word) == true) {
+            printf("Word %s is in the dictionary\n", word);
+        } else {
+            printf("Word %s is not in the dictionary\n", word);
+        }
+    }
+
+    if (strcmp(command, "exit") == 0) {
+        freeTrieAndExit(root);
+    }
+
+    if (strstr(commandsList, command) == NULL) {
+        printf("Unknown command. Use help to see list of available ones.\n");
+    }    
+}
+
+void safeScanf(char *buff, size_t sizeOf) {
+    fgets(buff, sizeOf, stdin);
+
+    if (strstr(buff, "\n") != NULL) {
+        buff[strcspn(buff, "\n")] = '\0';
+    }
 }

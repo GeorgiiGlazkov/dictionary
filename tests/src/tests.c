@@ -37,7 +37,7 @@ void testFindWord(void) {
     freeTrie(root);
 }
 
-void testAddWord() {
+void testAddWord(void) {
     TrieNode* root = createTrieNode(NULL);
     addWord(root, "catterpillar");
     
@@ -50,7 +50,7 @@ void testAddWord() {
     freeTrie(root);
 }
 
-void testDeleteWord() {
+void testDeleteWord(void) {
     TrieNode* root = init();
 
     deleteWord(root, "cat");
@@ -71,3 +71,21 @@ void testDeleteWord() {
     freeTrie(root);
 }
 
+void testAll(void) {
+    printf("Running tests for findWord(): ");      
+    testFindWord();
+    printf("OK\n");
+
+    TrieNode *root = init();
+    char word[MAX_WORD_LEN] = {0};
+    drawTrie(root, word, 0); 
+    freeTrie(root);
+    
+    printf("Running tests for addWord(): ");
+    testAddWord();
+    printf("OK\n");
+
+    printf("Running tests for deleteWord(): ");
+    testDeleteWord();
+    printf("OK\n");
+}

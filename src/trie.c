@@ -61,7 +61,7 @@ bool findWord(TrieNode* root, char* word) {
     return currTrieNode->isTerminal;
 }
 
-void deleteWord(TrieNode* root, char* word) {
+bool deleteWord(TrieNode* root, char* word) {
     size_t len = strlen(word), lastUnsafeLetterIndex = 0;
 
     TrieNode* currTrieNode = root, *lastUnsafeToDeleteNode = root;
@@ -69,7 +69,7 @@ void deleteWord(TrieNode* root, char* word) {
 
     for (; indexOfLetter < len - 1; indexOfLetter++) {
         if (currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])] == NULL) {
-            return;
+            return false;
         }
         
 		if (!isOnlyChild(currTrieNode, word[indexOfLetter]) || currTrieNode->isTerminal) {
@@ -83,7 +83,7 @@ void deleteWord(TrieNode* root, char* word) {
     TrieNode* nextTrieNode = currTrieNode->children[getChildIndexFromLetter(word[indexOfLetter])];
 
     if (nextTrieNode == NULL) {
-        return;
+        return false;
     }
     
     if (isChildless(nextTrieNode)) {
@@ -94,6 +94,8 @@ void deleteWord(TrieNode* root, char* word) {
 	} else {
         nextTrieNode->isTerminal = false;
 	}
+
+    return true;
 }
 
 void drawTrie(TrieNode* root, char word[], size_t wordLen) {

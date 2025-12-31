@@ -18,7 +18,7 @@ void addWord(TrieNode* root, char* word);
 
 bool findWord(TrieNode* root, char* word);
 
-void deleteWord(TrieNode* root, char* word);
+bool deleteWord(TrieNode* root, char* word);
 
 void drawTrie(TrieNode* root, char word[MAX_WORD_LEN], size_t wordLen);
 
